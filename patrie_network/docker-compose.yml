@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # 1. The Database (PostgreSQL)
+  postgres:
+    image: postgres:15-alpine
+    container_name: patrie_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin           # Matches your init.sql setup
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: patrie_network_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Hyperledger Iroha 2 (The Blockchain)
+  iroha:
+    image: hyperledger/iroha2:stable
+    container_name: patrie_iroha
+    ports:
+      - "8080:8080"  # API
+      - "5005:5005"  # P2P
+    environment:
+      - TORII_API_URL=0.0.0.0:8080
+      # Default Admin Public Key (Alice)
+      - IROHA_PUBLIC_KEY=ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03
+      # Default Admin Private Key (Alice)
+      - IROHA_PRIVATE_KEY=8026131302d99d30000020400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    volumes:
+      - ./config:/config
+
+  # 3. Your Rust BaaS Application
+  baas_api:
+    container_name: patrie_api
+    build: .   # Looks for Dockerfile in current directory
+    ports:
+      - "3000:3000"
+    depends_on:
+      - iroha
+      - postgres
+    environment:
+      # Connects to 'iroha' container on port 8080
+      - IROHA_URL=http://iroha:8080
+      # Connects to 'postgres' container using credentials from service #1
+      - DATABASE_URL=postgres://admin:password123@postgres:5432/patrie_network_db
+      # Add your external keys here (passed from .env is best practice)
+      - RUST_LOG=info
+
+volumes:
+  postgres_data:

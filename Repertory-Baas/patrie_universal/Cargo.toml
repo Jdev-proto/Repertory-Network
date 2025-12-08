@@ -1,0 +1,13 @@
+[package]
+name = "iroha_universal"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Using the latest pre-release versions compatible with Iroha 2
+iroha_client = "2.0.0-pre-rc.19" 
+iroha_data_model = "2.0.0-pre-rc.19"
+iroha_config = "2.0.0-pre-rc.19"
+tokio = { version = "1.28", features = ["full"] }
+eyre = "0.6" # Simplifies error handling
+serde_json = "1.0"
