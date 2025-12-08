@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  iroha0:
+    image: hyperledger/iroha:iroha2-stable
+    container_name: iroha0
+    ports:
+      - "8080:8080"
+      - "1337:1337"
+    environment:
+      - TORII_P2P_ADDR=0.0.0.0:1337
+      - TORII_API_URL=0.0.0.0:8080
+      - IROHA_PUBLIC_KEY=${KEY_0_PUBLIC}
+      - IROHA_PRIVATE_KEY=${KEY_0_PRIVATE}
+      - IROHA_GENESIS_PATH=/config/genesis.json
+    volumes:
+      - ./genesis.json:/config/genesis.json
+      - ./configs/peer0_config.json:/config/config.json
+    networks:
+      - repertory_net
+
+  iroha1:
+    image: hyperledger/iroha:iroha2-stable
+    container_name: iroha1
+    ports:
+      - "8081:8080"
+      - "1338:1337"
+    environment:
+      - TORII_P2P_ADDR=0.0.0.0:1337
+      - TORII_API_URL=0.0.0.0:8080
+      - IROHA_PUBLIC_KEY=${KEY_1_PUBLIC}
+      - IROHA_PRIVATE_KEY=${KEY_1_PRIVATE}
+      - IROHA_GENESIS_PATH=/config/genesis.json
+    volumes:
+      - ./genesis.json:/config/genesis.json
+      - ./configs/peer1_config.json:/config/config.json
+    networks:
+      - repertory_net
+
+  iroha2:
+    image: hyperledger/iroha:iroha2-stable
+    container_name: iroha2
+    ports:
+      - "8082:8080"
+      - "1339:1337"
+    environment:
+      - TORII_P2P_ADDR=0.0.0.0:1337
+      - TORII_API_URL=0.0.0.0:8080
+      - IROHA_PUBLIC_KEY=${KEY_2_PUBLIC}
+      - IROHA_PRIVATE_KEY=${KEY_2_PRIVATE}
+      - IROHA_GENESIS_PATH=/config/genesis.json
+    volumes:
+      - ./genesis.json:/config/genesis.json
+      - ./configs/peer2_config.json:/config/config.json
+    networks:
+      - repertory_net
+
+  iroha3:
+    image: hyperledger/iroha:iroha2-stable
+    container_name: iroha3
+    ports:
+      - "8083:8080"
+      - "1340:1337"
+    environment:
+      - TORII_P2P_ADDR=0.0.0.0:1337
+      - TORII_API_URL=0.0.0.0:8080
+      - IROHA_PUBLIC_KEY=${KEY_3_PUBLIC}
+      - IROHA_PRIVATE_KEY=${KEY_3_PRIVATE}
+      - IROHA_GENESIS_PATH=/config/genesis.json
+    volumes:
+      - ./genesis.json:/config/genesis.json
+      - ./configs/peer3_config.json:/config/config.json
+    networks:
+      - repertory_net
+
+networks:
+  repertory_net:
+    driver: bridge
