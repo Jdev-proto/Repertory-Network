@@ -17,7 +17,8 @@ services:
       - ./genesis.json:/config/genesis.json
       - ./configs/peer0_config.json:/config/config.json
     networks:
-      - repertory_net
+      - patrie_net
+      
 
   iroha1:
     image: hyperledger/iroha:iroha2-stable
@@ -35,7 +36,8 @@ services:
       - ./genesis.json:/config/genesis.json
       - ./configs/peer1_config.json:/config/config.json
     networks:
-      - repertory_net
+      - patrie_net
+      
 
   iroha2:
     image: hyperledger/iroha:iroha2-stable
@@ -53,7 +55,8 @@ services:
       - ./genesis.json:/config/genesis.json
       - ./configs/peer2_config.json:/config/config.json
     networks:
-      - repertory_net
+      - patrie_net
+      
 
   iroha3:
     image: hyperledger/iroha:iroha2-stable
@@ -71,8 +74,10 @@ services:
       - ./genesis.json:/config/genesis.json
       - ./configs/peer3_config.json:/config/config.json
     networks:
-      - repertory_net
+      - patrie_net
+      
 
 networks:
-  repertory_net:
+  patrie_net
+  :
     driver: bridge
